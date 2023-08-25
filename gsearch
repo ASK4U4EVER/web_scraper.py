@@ -1,0 +1,24 @@
+import requests
+from bs4 import BeautifulSoup
+
+def search_website(url, search_term):
+    response = requests.get(url)
+    
+    if response.status_code == 200:
+        soup = BeautifulSoup(response.content, 'html.parser')
+        search_results = soup.find_all(text=lambda text: search_term.lower() in text.lower())
+        return search_results
+    else:
+        return []
+
+if __name__ == "__main__":
+    website_url = "https://www.epfindia.gov.in/site_en/circulars.php"
+    search_term = "RTI"
+    
+    results = search_website(website_url, search_term)
+    
+    if results:
+        for result in results:
+            print(result)
+    else:
+        print("No results found.")
